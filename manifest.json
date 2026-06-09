@@ -1,0 +1,26 @@
+{
+  "name": "SEFRAOS — Protocolo Osteoporosis",
+  "short_name": "SEFRAOS",
+  "description": "Herramienta clínica para el tratamiento antiosteoporótico según grado de fragilidad. Protocolo SEFRAOS 2024.",
+  "start_url": "/Sefraos-protocolo-interactivo/",
+  "scope": "/Sefraos-protocolo-interactivo/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#006871",
+  "theme_color": "#006871",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "sefraos_icon_192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "sefraos_icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

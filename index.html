@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006871">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SEFRAOS">
+  <link rel="apple-touch-icon" href="sefraos_icon_192.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SEFRAOS — Protocolo Osteoporosis segun Fragilidad</title>
@@ -233,6 +239,15 @@ function updateScore(){
   else if(pos>=4&&neg===0){vv.style.cssText='background:#b2e8d0;color:#004030';vv.textContent='Candidato firme';}
   else if(pos>=3){vv.style.cssText='background:#d0f0e0;color:#004030';vv.textContent='Probable candidato';}
   else{vv.style.cssText='background:#f0f4f4;color:#5a7275';vv.textContent='Incompleto';}
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/Sefraos-protocolo-interactivo/sw.js')
+      .then(r => console.log('SW registrado:', r.scope))
+      .catch(e => console.log('SW error:', e));
+  });
 }
 </script>
 </body>
