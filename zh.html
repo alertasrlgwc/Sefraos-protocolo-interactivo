@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SEFRAOS — 基于衰弱程度的骨质疏松症方案</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#006871">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SEFRAOS">
+<link rel="apple-touch-icon" href="sefraos_icon_192.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',Arial,sans-serif;background:#f4f7fb;color:#1a2a2e}
+.app{background:#fff;max-width:980px;margin:2rem auto;border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(0,104,113,.10);padding-bottom:44px}
+.header{background:#fff;border-bottom:3px solid #006871;padding:1.1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.logo-area{display:flex;align-items:center;gap:14px}
+.header-right{text-align:right}
+.header-right strong{font-size:12px;color:#006871;display:block}
+.header-right p{font-size:10px;color:#5a7275;line-height:1.5}
+.hero{background:#006871;color:#fff;padding:1.3rem 2rem}
+.hero h1{font-size:18px;font-weight:800;margin-bottom:4px}
+.hero p{font-size:12px;opacity:.9;line-height:1.6;max-width:680px}
+.bgs-link{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;text-decoration:none;border:1px solid rgba(255,255,255,.35)}
+.zone-section{padding:1.4rem 2rem .5rem;background:#fff}
+.section-label{font-size:10px;font-weight:700;color:#5a7275;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.zone-cards{display:flex;gap:8px;margin-bottom:1rem}
+.zcard{flex:1;border:none;border-radius:14px;padding:14px 6px 12px;cursor:pointer;text-align:center;transition:transform .2s,box-shadow .2s;font-family:inherit}
+.zcard:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.20)}
+.zcard.active{transform:translateY(-5px);box-shadow:0 0 0 3px #fff,0 0 0 6px #3F444B}
+.fig-area{height:72px;display:flex;align-items:flex-end;justify-content:center;gap:3px;margin-bottom:10px}
+.fig-area img{height:68px;width:auto;object-fit:contain}
+.zcard-name{font-size:10.5px;font-weight:800;color:#fff;display:block;line-height:1.3;margin-bottom:4px;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.cfs-tag{display:inline-block;background:rgba(0,0,0,.22);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:5px}
+.zcard-desc{font-size:9px;color:rgba(255,255,255,.85);display:block;line-height:1.3}
+.zbar-wrap{padding:0 2rem}
+.zbar{display:flex;gap:4px;margin-bottom:4px}
+.zb{height:6px;border-radius:3px}
+.zb.g{background:#2e6b70;flex:4}.zb.a{background:#d4920a;flex:2}.zb.r{background:#b03a3a;flex:3}
+.zlbl-row{display:flex;gap:4px;margin-bottom:1.2rem}
+.zl{font-size:9.5px;font-weight:700}
+.zl.g{flex:4;color:#2e6b70}.zl.a{flex:2;color:#a06000}.zl.r{flex:3;color:#b03a3a}
+.detail-wrap{padding:0 2rem 1.5rem}
+.detail-panel{border-radius:12px;padding:1.3rem 1.5rem;border:2px solid #d0e4e6;background:#fff;min-height:160px;transition:border-color .25s,background .25s}
+.ph{text-align:center;padding:2rem;color:#5a7275}
+.panel-top{display:flex;align-items:center;gap:10px;margin-bottom:.8rem;flex-wrap:wrap}
+.vp{font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px}
+.vp-g{background:#b2e8d0;color:#004030}.vp-a{background:#ffdea0;color:#6a3800}.vp-r{background:#f5c0c0;color:#6a1010}
+.panel-title{font-size:15px;font-weight:800;color:#3F444B}
+.panel-desc{font-size:12px;color:#5a7275;margin-bottom:1rem;line-height:1.6}
+.inds{display:flex;gap:6px;margin-bottom:.9rem;flex-wrap:wrap}
+.ind{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:700;border:1px solid transparent}
+.ind-ok{background:#e0f5e0;color:#2a6030;border-color:#a0d8a0}
+.ind-warn{background:#fdf0d8;color:#7a4400;border-color:#f0c070}
+.ind-ko{background:#fde8e8;color:#7a1010;border-color:#f0a0a0}
+.ind-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ind-ok .ind-dot{background:#2a8040}.ind-warn .ind-dot{background:#d4890a}.ind-ko .ind-dot{background:#b03030}
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.p-card{background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d0e4e6}
+.p-card-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#5a7275;margin-bottom:5px}
+.p-card-body{font-size:11.5px;color:#3F444B;line-height:1.55}
+.p-card-body li{margin-left:14px;margin-bottom:2px}
+.check-section{padding:0 2rem 1.5rem;background:#fff;border-top:1px solid #d0e4e6}
+.check-section .section-label{margin-top:1.2rem}
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ci{display:flex;align-items:flex-start;gap:9px;background:#fff;border:1px solid #d0e4e6;border-radius:8px;padding:8px 10px;cursor:pointer;transition:background .15s}
+.ci.ok{background:#e8f7ee;border-color:#50a870}.ci.ko{background:#fde8e8;border-color:#c06060}.ci.warn{background:#fdf4e0;border-color:#d4920a}
+.cbox{width:17px;height:17px;border:2px solid #d0e4e6;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;font-size:10px;font-weight:700;color:#fff}
+.ci.ok .cbox{background:#3a9060;border-color:#3a9060}.ci.ko .cbox{background:#b84040;border-color:#b84040}.ci.warn .cbox{background:#c07800;border-color:#c07800}
+.ct strong{display:block;font-size:11px;font-weight:700;color:#3F444B}
+.ct span{font-size:11px;color:#5a7275;line-height:1.3}
+.score-row{display:flex;align-items:center;gap:12px;margin-top:.9rem;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid #d0e4e6}
+.sr-label{font-size:12px;color:#5a7275;flex:1}.sr-val{font-size:20px;font-weight:800;color:#006871}
+.sr-verdict{font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px}
+.ev-section{padding:1.2rem 2rem;background:#faf9f5;border-top:1px solid #d0e4e6}
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:.8rem}
+.ev-card{background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d0e4e6}
+.ev-num{font-size:22px;font-weight:800;color:#006871;line-height:1}
+.ev-label{font-size:10px;font-weight:700;color:#5a7275;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.ev-desc{font-size:10.5px;color:#5a7275;line-height:1.4;margin-top:4px}
+.footer{background:#006871;color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.footer a{color:#b2f0d0;text-decoration:none;font-size:11px}
+.footer-disc{font-size:10px;opacity:.75;max-width:500px;line-height:1.4}
+/* LANGUAGE MODAL */
+.lang-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem}
+.lang-modal{background:#fff;border-radius:20px;padding:2rem 1.5rem;max-width:540px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.3);text-align:center}
+.lang-modal h2{font-size:16px;font-weight:800;color:#006871;margin-bottom:4px}
+.lang-modal p{font-size:12px;color:#5a7275;margin-bottom:1.2rem;line-height:1.5}
+.lang-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:1rem}
+.lang-btn{border:2px solid #d0e4e6;border-radius:10px;padding:8px 4px;cursor:pointer;background:#fff;transition:all .15s;font-family:inherit;text-align:center}
+.lang-btn:hover{border-color:#006871;background:#e8f4f5}
+.lang-btn.active{border-color:#006871;background:#e8f4f5}
+.lang-flag{font-size:18px;display:block;margin-bottom:2px}
+.lang-name{font-size:9px;font-weight:700;color:#3F444B;display:block}
+.lang-confirm{background:#006871;color:#fff;border:none;border-radius:10px;padding:11px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;margin-top:4px}
+/* LANGUAGE BAR - always visible at bottom */
+.lang-bar{position:fixed;bottom:0;left:0;right:0;background:#004f57;z-index:9998;display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 10px;flex-wrap:wrap;box-shadow:0 -2px 10px rgba(0,0,0,.25)}
+.lang-bar-btn{border:1.5px solid rgba(255,255,255,.3);border-radius:16px;padding:3px 9px;cursor:pointer;background:transparent;color:#fff;font-size:10px;font-weight:700;font-family:inherit;transition:all .15s;white-space:nowrap}
+.lang-bar-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.7)}
+.lang-bar-btn.active{background:#95D600;color:#004f57;border-color:#95D600}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE MODAL (shown on first visit) -->
+<div class="lang-overlay" id="langOverlay">
+  <div class="lang-modal">
+    <img style="height:42px;margin-bottom:.8rem" src="https://sefraos.es/wp-content/uploads/2021/08/cropped-Logo_SEFRAOS.png" alt="SEFRAOS" onerror="this.style.display='none'">
+    <h2>Selecciona tu idioma · Select your language</h2>
+    <p>Elige el idioma de la herramienta clínica<br>Choose the language for the clinical tool</p>
+    <div class="lang-grid"><button class="lang-btn" id="mb-es" onclick="modalSelect('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></button>
+<button class="lang-btn" id="mb-en" onclick="modalSelect('en')"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span></button>
+<button class="lang-btn" id="mb-zh" onclick="modalSelect('zh')"><span class="lang-flag">🇨🇳</span><span class="lang-name">普通话</span></button>
+<button class="lang-btn" id="mb-pt" onclick="modalSelect('pt')"><span class="lang-flag">🇧🇷</span><span class="lang-name">Português</span></button>
+<button class="lang-btn" id="mb-fr" onclick="modalSelect('fr')"><span class="lang-flag">🇫🇷</span><span class="lang-name">Français</span></button>
+<button class="lang-btn" id="mb-it" onclick="modalSelect('it')"><span class="lang-flag">🇮🇹</span><span class="lang-name">Italiano</span></button>
+<button class="lang-btn" id="mb-de" onclick="modalSelect('de')"><span class="lang-flag">🇩🇪</span><span class="lang-name">Deutsch</span></button>
+<button class="lang-btn" id="mb-ja" onclick="modalSelect('ja')"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span></button>
+<button class="lang-btn" id="mb-ko" onclick="modalSelect('ko')"><span class="lang-flag">🇰🇷</span><span class="lang-name">한국어</span></button>
+<button class="lang-btn" id="mb-ar" onclick="modalSelect('ar')"><span class="lang-flag">🇸🇦</span><span class="lang-name">العربية</span></button>
+</div>
+    <button class="lang-confirm" onclick="confirmLang()">继续 · Continue</button>
+  </div>
+</div>
+
+<!-- PERSISTENT LANGUAGE BAR (always visible) -->
+<div class="lang-bar"><button class="lang-bar-btn" id="lb-es" onclick="switchLang('es')"><span>🇪🇸</span> ES</button>
+<button class="lang-bar-btn" id="lb-en" onclick="switchLang('en')"><span>🇬🇧</span> EN</button>
+<button class="lang-bar-btn" id="lb-zh" onclick="switchLang('zh')"><span>🇨🇳</span> 中文</button>
+<button class="lang-bar-btn" id="lb-pt" onclick="switchLang('pt')"><span>🇧🇷</span> PT</button>
+<button class="lang-bar-btn" id="lb-fr" onclick="switchLang('fr')"><span>🇫🇷</span> FR</button>
+<button class="lang-bar-btn" id="lb-it" onclick="switchLang('it')"><span>🇮🇹</span> IT</button>
+<button class="lang-bar-btn" id="lb-de" onclick="switchLang('de')"><span>🇩🇪</span> DE</button>
+<button class="lang-bar-btn" id="lb-ja" onclick="switchLang('ja')"><span>🇯🇵</span> 日本</button>
+<button class="lang-bar-btn" id="lb-ko" onclick="switchLang('ko')"><span>🇰🇷</span> 한국</button>
+<button class="lang-bar-btn" id="lb-ar" onclick="switchLang('ar')"><span>🇸🇦</span> عر</button>
+</div>
+
+<div class="app">
+<div class="header">
+  <div class="logo-area">
+    <img src="https://sefraos.es/wp-content/uploads/2021/08/cropped-Logo_SEFRAOS.png" alt="SEFRAOS" style="height:44px;width:auto" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div style="display:none;background:#006871;color:#fff;font-size:14px;font-weight:800;padding:8px 14px;border-radius:8px">SEFRAOS</div>
+    <div style="width:1px;height:32px;background:#d0e4e6"></div>
+    <div><div style="font-size:13px;font-weight:800;color:#006871">骨质疏松症方案</div><div style="font-size:10px;color:#5a7275">二级骨折预防 · 老年患者</div></div>
+  </div>
+  <div class="header-right"><strong>临床工具 · SEFRAOS / 老年医学团队</strong><p>SEFRAOS 方案 2024 · CFS Rockwood v2.0</p></div>
+</div>
+<div class="hero">
+  <h1>基于衰弱程度的抗骨质疏松治疗</h1><p>请选择患者的临床概况。<strong>不要仅凭图标做决定</strong> — 请参阅每个CFS级别的详细定义，包括痴呆症标准。</p>
+  <a class="bgs-link" href="https://www.bgs.org.uk/sites/default/files/content/attachment/2018-07-05/rockwood_cfs.pdf" target="_blank">&#128196; Definición oficial CFS con criterios de demencia (BGS / Dalhousie)</a>
+</div>
+<div class="zone-section">
+  <div class="section-label">第1步 — 患者概况 · 分配级别前请参阅官方CFS定义</div>
+  <div class="zone-cards">
+    <button class="zcard" data-z="1" onclick="selectZone(1)" style="background:#2e6b70"><div class="fig-area"><img src="data:image/png;base64,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" alt="CFS1-3"></div><span class="zcard-name">强健自立</span><span class="cfs-tag">CFS 1–3</span><span class="zcard-desc">活跃、独立，<br>无功能限制</span></button>
+    <button class="zcard" data-z="2" onclick="selectZone(2)" style="background:#3a8a91"><div class="fig-area"><img src="data:image/png;base64,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" alt="CFS4"></div><span class="zcard-name">衰弱前期</span><span class="cfs-tag">CFS 4</span><span class="zcard-desc">行动迟缓，<br>限制活动的症状</span></button>
+    <button class="zcard" data-z="3" onclick="selectZone(3)" style="background:#d4920a"><div class="fig-area"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADAAI4DASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAUGAwQHAgEI/8QAOhAAAgICAQEFBgUACAcAAAAAAAECAwQRBSEGEhMxUUFhcYGhwSIykbHRFBUjJTM1QuFDUmJjc7Lw/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAQGAwUHAgH/xAA0EQABAwIEAwUHAwUAAAAAAAABAAIDBBEFITFREhNBBmGhscEUIkJxgZHxFdHhMjNSovD/2gAMAwEAAhEDEQA/AP2WAAiAAIgACIAAiAAIgACIAAiAAIgACIAAiAAIgACIAAiAAIgB8nOMI96coxXq3oE21RfQfIThOKlCUZRfk09o+nwG+YRAAfUQABEAARAAEQABEANTkeRxcCCeRZqT/LCK3JmOWVkTS+Q2A3XprHPNmi5W2CFxO0mFdcq7ITp35Slpr5+hNJpra6oxU1ZBVNLoXA2XuWGSI2eLL5OShByl0SW2c/5POuz8mVtsn3d/ghvpFF55JSfHZKh+Z0z18dM54VXtZO8cuIHI3J7/AMLbYRG08Tzqtrjc27ByoXVTkoprvxT6SXodAi1KKkntNbTOal94HIWTxOPNPbjBQl8V0PPZOpPE+AnLUevovuLxCzZAO5bwALqtGgACIAAiAAIgACIc7z8meXl2ZFjbc5bXuXsRaef5uOG5Y2Ou9frrL2Q/llPKL2oro5XNgjdfhvf59Ptmt/hVO5gMjhrohe+zkbI8LjqxttxbW/Ym+n0KLFOUlGK229JHRqoqjGjFvpXBJ/JDsnFeaSTYW+/4TF3+41u5UN2k5n+iJ4mNp3SX4pf8if3KiZMm2V+RZdN7lOTk/mYzSYniEldMXu0Gg2H/AGqnUtM2nZwjXqhK8By0uOscLE5UTe5JecX6oijPGWPXHpDxZer6Ij0k8lPKJY3WIWSZjZGcDhcFdCrnGyuNkH3oSSlF+qZ6ITsrySyaHi2aVlS/Cl5OP+38E2dToqplXA2Vh18+qqc8RheWFAASliQABEAARDFl3Rx8W2+XlXFy16mUhe2F/h8Wqk+ts0vkuv8ABFrqj2anfLsPHp4rNBHzZGs3VRusnddO2x7nOTk372eADkhJJuVcALZBXbiOI4+qijIjV4ljjGanJt9Wt715GzzVvg8Tk2b0/DaXxfT7mDsxd43DU7e3XuD+Xl9NGv2yv8Pi41J9bbEn8F1/fR0oyQwYWZYmhoLb5bkfuqvwvkqgx5vmqeADmitCH2ScZOMk017D3jpO+CflskZQqvr30kn5NEiGn5rSQc1jfJwFafG5UsPOqyI7fcfVeq9qOgwlGcIzi9xktp+qOfSwrU2k4teuy9cdOE8GlwfRQUfhpaLd2VdIzmRP0yI9fRabFg13C8LYABcFpkAARAAEQp3a/Kd3JeAn+Cha+b6v7foXE5/zT73LZb3v+1kvqVjtVM5lK1g+I5/T+VtMJYDMXHoFqAAoCsSsvYm+KeRjylqT1OK9fX7Gv20uVmfVQuqqht/F/wCyRixcGFfHf1njZ8ZX1JT7kV+X3PqRmTfbl5U77etlkt9PoiwVNZJHhrKN4zOYNwQW3J6dbrXRQtdVGZp08/ws6p7nDePJfituUY/CKe/q1+hpk12lqWLjYGEvOutylr2tvr9UyFNZXw8iXlf4gX+drnxKlU7+Yzj3JQkMO+DrUJOMZLp6bI8JtPa80R4ZjE64WR7A8WVpxeKybtOa8KPrLz/Qm8HGhiUeFBuXXbb9TLXJTrjNeUkmejqVJQQ0/vMzO6qk1Q+TI6IACeo6AAIgACIUDm63Xy+VGXm7XL9ev3L+VbtpiqF9OXFa767kvivL6fsVvtPTmWkDx8Jv9Dl+y2eFSBs3CeqroYNzhf8AN8X/AMsf3KDFHzJGs3ICsL3cLS7ZeKePzro96vEuktefcejHT4tdqthW5OqSk9x6Jp+06MVq6XKUT5DHxseF+P35bj/qXfW+n6lnrOz7KQNcHuOugvna4y+netVDiLprggfdRvaXMrzc2q2p/h8GPT0fV6+pFhpp6a0/QFbqZ3VErpX6lbSKMRsDBoEABgXtdD4yXf43Gl60wf0RsGlwT73D4r/7aRunX6V3FAx24HkqbKLSOHegAM6xoAAiAAIhCds4p8VCXtjcv2ZNkL2yaXExT9tq1+jNbjFvYZb7KVRf32fNU4yY1sqMiu6H5oSUl8jGDljXFpBGoVsIBFiugVU2x1bdyFtkNN61GMdP4Lf1IynkOOwOSyK4Xd6qVSm2pOe5re1vr7NG3xuBhX8bjWW0Rtbqi3325dddfM85eLjY/I4NtVFVcZSnVJRglvvR6fsdJlbPy2SsAGYNyS4+9l1tvuquws4nMdc67DTNUu2bstnY/OUm/wBTyWyXEYFXN11OjdNtMmouT0pJr7EJ2ix6cblbKaIKEEo6S+BSq3CZqWMyyEZOt9bX2W9grGSuDGg6XUcF1ekSvGY9N/DchKVcXbUoyjL2rz/g0cCarzsex+UbYt/JkN1MWiMuOT/DMj0WYSg8QAzH7XV24Cq2nh8eu6DhNJ7i/NdXr6G8AdYgiEMTYx8IA+yqMj+NxceqAAyrwgACIAAiEF21f920x9bk/oydK323sXh41W+rcpP6fyanHXhtBIe71CmUAvUNVYABy9WpXPicGdvG40552Wk601CE1FL3dFs9chgYmLQsuut+LVZCfflNyelJb836bPHEXZ9nFY6xsemKUO6p2zfXXTySPuXg8vk0WQu5CqMZRe4V1efu2+p0VrY3UreXEXOLRY20Nt3EeCrRLhMeJ4Av69yz8snDM4/IT13b/DfwmtFd7X1uHMOXsnXFr9vsSNuJXLs7HNU77Lo1RsTnbJpNab6b0fO19KvwcfOgui6P4SW1/wDe8hYqx1RSyutb+l+t+lj0HQLPSERytF92+qj+A7z47lYry8Db+SZE1puyKT09rRPdkYq2rPx3/wAStL/2X3IvhavG5bGra2vETa9y6/Yr0sJkgpQPiuP9v5WyY8Nklv0sfBX8AHT1VUAARAAEQABEKX2tu8Xl5QT6VQUfv9y6HO8+c7M6+yaalKyTafs6lW7VzFtMyMfEfL8rbYQy8pdsFgAJPs1h05vI+HkQc64wcmk2vT+SkU0DqiVsTNSbLeyyCNhedAmPzfJV0149M4pRSjFKtNv0LrQ5yorlbFRscU5Jex66mPGwsTG/wMeut+qj1/UznScKoKikB50pdpl0FvmqxV1EcxHA2yieDoufF5GHk1yhFTnXHa1uL9Pd1ZDcpyNcuCxcCElKzuxVmuqio+wttkVOuUG2lJNbXmVnD7OUzyL67sttVTUdQWn1Sab38SBiVJUsiZT0wvcFpJI0yNvsD9FIpZoi90kuVjey1+xtvc5SVb8rK2vmuv8AJr8JbGPaKqyP5ZWySXue0v3LThcRg4bc6an4jTXflJt6f0IzC7Nyozq75ZSlCuamkodXp7IP6RWwsp2AA8LicjpmN7d6ke2QPdI4m1xbzViABdFo0AARAAEQABEMd+PRetXU12L/AKopmQHlzQ4WcLhfQSMwq/z/ABmHFYvgYvdlZfGEnBP8r8yWwMDEwYtY1Si5fmbe2zaBDhw+CKd0zWi5tbIZflZ31Mj2BhJt80ABOUdDDVjVV5V2TFPxLlFT69OnRGYHlzGuIJGmnkvocReyAA9L4gACIAAiAAIgACIAAiAAIgACIAAiAAIgACIAAi//2Q==" alt="CFS5-6"></div><span class="zcard-name">轻中度衰弱</span><span class="cfs-tag">CFS 5–6</span><span class="zcard-desc">需要IADL/BADL帮助，<br>可能需要支持</span></button>
+    <button class="zcard" data-z="4" onclick="selectZone(4)" style="background:#c86060"><div class="fig-area"><img src="data:image/png;base64,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" alt="CFS7-8"></div><span class="zcard-name">重度衰弱</span><span class="cfs-tag">CFS 7–8</span><span class="zcard-desc">依赖BADL，<br>需要持续帮助</span></button>
+    <button class="zcard" data-z="5" onclick="selectZone(5)" style="background:#b03a3a"><div class="fig-area" style="align-items:center"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADAAMADASIAAhEBAxEB/8QAGwABAAIDAQEAAAAAAAAAAAAAAAYHAQQFAwj/xAA9EAACAQMBBQMKAwcEAwAAAAAAAQIDBBEFBgcSITEWUZETFCJBVWFxgaGxNnTCJDJCgpPB0RVSYoOS4vL/xAAbAQEAAgMBAQAAAAAAAAAAAAAAAQQCAwUGB//EADMRAAIBAwEFBgQFBQAAAAAAAAABAgMEEVEFITFSoRIUFkFx0QYiYbEVMzSRwSMycoHw/9oADAMBAAIRAxEAPwD7LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABpXuqWNnf2tjcVlGvdNqlHHXHf3dxukJpmUoSik2uIABJiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVht1WlHeNYylNpUpUOF9y4s/3ZZ5VW8D8f0f+n7lqlah/fP1O1tRJW9v/j7AGJyjCLnOSjFLLbeEkedpc213R8ta3FKvTbxx05qSz8UWTjYeMnqAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAVPvHk4bcwmusY0mi2CpN6inS2uVSLWXQhJcumG/8HY0feQm409WsuHvq0Hy/wDF/wCfkUadWMKklLU9PeWNa5s6EqSziO/oaO9XWatxqv8ApNGrJULeKdWKfKU3z59+Fj55IjZ6hf2UZRs765tlJ5kqVWUM/HDMalcyvdQuLueeKtVlUefe8muU6lRym5HpLS0hQt40scFv9fMlOym2Oo6Zdwp3lxUurOcsTjUk5Sgu+LfP5dC3oyUoqUWmmspr1nzwWFpW8Oha6Pb29awrVbmjTVNtTSjLCwnnr9CzbXCjlTZxNtbJlVcalvDf54+5YwKm1rb/AFe9g6dnGFhTfVwfFN/zPp8kiN0NS1Chdq7pXtxGunnynlG2/j3/ADNsryCe5ZKNH4crzjmclF6cf+6l+gg2h7xLGpQhT1ajUoVksSqU48UJe/HVfDmSWx2i0O9S831S1bfSMp8EvCWGWI1oS4M5NfZ9zQbU4P18v3OoDyVxbtJqvSafRqaNbUNY0uwpupeX9vSWM4c05P4Jc38jNtLiVo05yeIptm8CF3+8XSKLcbS2ublr1tKEX48/oaM95sU/Q0Vte+5x+k0u5pLzOhDY97NZVP7L7ssIxPi4JcGOLHLPeVzLeZWy+HR4JerNdv8ASIbzKqfp6PBr3XDX6SO9UtTZ+B33J1Xuc/ZHanVqe01KlqF5Vr0rmr5KpCpLKg28JxX8OH3eotc+fKlecruVynw1HUdTl6nnJf1lXjdWdC5h+7WpxqL4NZNdnNyTTZd+IbWNKUKkVjKw8fQ9QAXDzYAAAAABU29n8Ux/LQ+8iIEv3s/imP5aH3kRA41f8xn0jZf6On6G/Xq2NfSKKxKnf0ZcDwvRq03zTfdJdPesdxoA7uy+0lxosnSlQpXVpN+nRqRWfk/V9jBYk9+43z7dKDdNdp6ZwcIG1qNObrO8VlO1trmUqlvFrlw56J+vHQ1TFrBujLtLIAAJAAAAAAAAAAAAB1LHaDW7KFOFtqdzCFPlCDnmKXdh8sHLBKk1wMJ04VFiaTX1L70K9eo6NaX0oqMq1KMpJdE8c/qbpytj48Gy2mLhx+zQfisnVO3B5isnzG4io1ZKPBNgAGRqAAAKm3tfimP5aH3kRBc1kl+9n8Ux/LQ+8iIHGr/mM+kbL/R0/QAA1F49ql1c1LanbTuKsqFNtwpubcYt9cLojxABCSXAAAEgAAAAAAAAAAAAAAHSsdd1myUI2up3VOEMKMPKNxX8r5Fk7AbVT1uM7K+UY3tKPEpR5KpHPXHqa5FSEl3ZKo9srRw4uFRqOeO7gfX54LFvVlGaWdxyNrWNGrbzm4pNJvPoXGADrHgAAACot6+ZbVTi3yVCCX1InFNLDeS+9Q0jS9QqeUvbC3r1OHh45wTljuz1Ipt7s/otloEqtnp1KldVKtOlSlFtc3Luzjpk51a2llzyew2btqkoU7dxedy8isAWNqWz2jUdsdD0inax8nKlOdbLeanDFtN/OLJXDZjZ+DytItX8YZ+5hG0lLO/gWa236FJRfZfzLPlq1/BRwLz7N6B7Hsv6SHZvQPY9l/SRl3KWpo8S0eR9CjAXhPZjZ+by9ItV8IY+xjsrs77Jt/BjuU9SfEtDkfT3KQBd/ZXZ32Tb+DHZXZ32Tb+DHcp6jxLb8j6e5SALv7K7O+ybfwY7K7O+ybfwY7lPUeJbfkfT3KQBd/ZXZ32Tb+DHZXZ32Tb+DHcp6jxLb8j6e5SALv7K7O+ybfwY7K7O+ybfwY7lPUeJbfkfT3KQBd/ZXZ32Tb+DIlabM6XdXG0th5ri4tZ8VrJTl6ClFuKxnnzXrMZWko43m+jt6hVTfZaxjTzaWv1K9Jhunu6VDaWVvOlxTuaMoQn/ALcek18Gl9ESfYXQtDu9mbO7q6dQrVqkZcc6keJtqTT6/Ak9npunWc+O0sLW3njHFSoxi8fFI2UbaSankpbS21SnCpb9h53r/ZtAA6B5IAAAEX2xl5xr+z2mLnxXXnE17oLK/uSgiNF+f70asusNPs+FP1cUv/t+Bqq8EtWXrBYnKpyxb6YXVmLf9t3pXE3zjYWagn3N4f65EvIjsBm51TX9TlCcfLXfBDijh8Mc4+jXgS4Ud8c6tk7R+WqqfLFLpl9WAAbSgAAAAAAAAAAAAAAACJ6fUVHefqVFzS84s4Txn1x4V9sksIXrvlbfefo9enF8Neg6cvf+/nwymaqrxh/Uv2C7TqQ1i+m/+Dd3f1I06Op6Ulh2N/UhFY/gbfC/oyTkP0yTs95+p2yyqd5bRqpf8ko/+3iTAUn8uNCNoR/q9vmSf7rf1yAAbSiAAADlaNotPTtS1K/8vKtVvqvG8xxwRWcRXf1+x1QQ4pvJnGpKMXFPc+P3AAJMAAAAAAAAAAAAAAAAAAAYaTabSyuj7jIAOTW0WFTamjrquJRlTt3RdJR5S5vm3n39MepHWAIUUuBnOrKpjtPgsL0AAJMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/9k=" style="height:54px" alt="CFS9"></div><span class="zcard-name">终末期疾病</span><span class="cfs-tag">CFS 9</span><span class="zcard-desc">预期寿命 &lt;6个月，<br>不一定卧床</span></button>
+  </div>
+</div>
+<div class="zbar-wrap"><div class="zbar"><div class="zb g"></div><div class="zb a"></div><div class="zb r"></div></div><div class="zlbl-row"><div class="zl g">治疗 — 明确顺序</div><div class="zl a">个体化</div><div class="zl r">不启动 · 考虑减药</div></div></div>
+<div class="detail-wrap"><div class="detail-panel" id="detailPanel"><div class="ph"><div style="font-size:28px;opacity:.25;margin-bottom:6px">&#9757;</div><p style="font-size:12px">选择患者概况以查看完整治疗建议</p></div></div></div>
+<div class="check-section">
+  <div class="section-label">第2步 — 转诊和骨折后随访清单</div>
+  <p style="font-size:12px;color:#5a7275;margin-bottom:.9rem">勾选所有适用项目。</p>
+  <div class="check-grid">
+    <div class="ci" id="ci0" onclick="toggleCI(0,'ok')"><div class="cbox" id="cb0"></div><div class="ct"><strong>确诊骨质疏松性骨折</strong><span>髋部、脊椎、肱骨近端或其他脆性骨折</span></div></div>
+    <div class="ci" id="ci1" onclick="toggleCI(1,'ok')"><div class="cbox" id="cb1"></div><div class="ct"><strong>预期寿命 &gt; 12个月</strong><span>临床估计生存期超过1年</span></div></div>
+    <div class="ci" id="ci2" onclick="toggleCI(2,'ok')"><div class="cbox" id="cb2"></div><div class="ct"><strong>功能性步行</strong><span>独立或使用助行器 — 非永久性卧床</span></div></div>
+    <div class="ci" id="ci3" onclick="toggleCI(3,'ok')"><div class="cbox" id="cb3"></div><div class="ct"><strong>无重度认知障碍</strong><span>具有治疗依从能力</span></div></div>
+    <div class="ci" id="ci4" onclick="toggleCI(4,'ok')"><div class="cbox" id="cb4"></div><div class="ct"><strong>充足的社会支持</strong><span>确保随访的支持网络</span></div></div>
+    <div class="ci" id="ci5" onclick="toggleCI(5,'warn')"><div class="cbox" id="cb5"></div><div class="ct"><strong>中度认知障碍</strong><span>评估知情同意能力和实际依从性</span></div></div>
+    <div class="ci" id="ci6" onclick="toggleCI(6,'ko')"><div class="cbox" id="cb6"></div><div class="ct"><strong>重度不可逆功能依赖</strong><span>BADL完全依赖 — 考虑排除</span></div></div>
+    <div class="ci" id="ci7" onclick="toggleCI(7,'ko')"><div class="cbox" id="cb7"></div><div class="ct"><strong>活动性终末期疾病</strong><span>预期寿命 &lt; 6个月 — 不启动治疗</span></div></div>
+  </div>
+  <div class="score-row"><div class="sr-label">满足的阳性标准 <span style="font-size:10px;opacity:.7">（共5项）</span></div><div class="sr-val" id="srVal">0 / 5</div><div class="sr-verdict" id="srVerdict" style="background:#f0f4f4;color:#5a7275">&mdash;</div></div>
+</div>
+<div class="ev-section">
+  <div class="section-label">科学依据</div>
+  <div class="ev-grid">
+    <div class="ev-card"><div class="ev-label">死亡风险（CFS）</div><div class="ev-num">+21%</div><div class="ev-desc">每额外CFS类别在70个月时（CSHA，Rockwood 2005）</div></div>
+    <div class="ev-card"><div class="ev-label">机构化风险</div><div class="ev-num">+24%</div><div class="ev-desc">每CFS类别 — 支持将CFS 7–9排除在复杂治疗之外</div></div>
+    <div class="ev-card" style="border-color:#006871"><div class="ev-label" style="color:#004f57">SEFRAOS方案</div><div class="ev-num" style="color:#006871">2024</div><div class="ev-desc">老年人骨质疏松性骨折二级预防 · sefraos.es</div></div>
+  </div>
+  <div style="margin-top:8px;font-size:10px;color:#5a7275">Referencias: Rockwood K et al. <em>CMAJ</em> 2005;173(5):489–95 · Protocolo SEFRAOS 2024 · CFS v2.0 ©2005-2020 Rockwood, Dalhousie University</div>
+</div>
+<div class="footer"><div><div style="font-weight:800;margin-bottom:2px;font-size:13px">SEFRAOS — 西班牙骨质疏松性骨折学会</div><a href="https://sefraos.es/protocolo-y-guias/" target="_blank">sefraos.es/protocolo-y-guias</a></div><div class="footer-disc">仅供临床团队使用。参考性质 — 不替代临床判断或现行SEFRAOS官方方案。</div></div>
+</div>
+
+<script>
+var LANG='zh';
+var MAP={es:'index.html',en:'en.html',zh:'zh.html',pt:'pt.html',fr:'fr.html',it:'it.html',de:'de.html',ja:'ja.html',ko:'ko.html',ar:'ar.html'};
+var _sel=LANG;
+
+(function(){
+  var s=localStorage.getItem('sefraos_lang');
+  // Mark active bar button
+  var lb=document.getElementById('lb-'+LANG);
+  if(lb) lb.classList.add('active');
+  if(!s){
+    // First visit: show modal, pre-select current lang
+    document.getElementById('langOverlay').style.display='flex';
+    var mb=document.getElementById('mb-'+LANG);
+    if(mb) mb.classList.add('active');
+  } else if(s!==LANG){
+    // Saved lang differs: redirect
+    window.location.href=MAP[s]||'index.html';
+  }
+  // else: saved lang matches current, stay
+})();
+
+function modalSelect(l){
+  _sel=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  var mb=document.getElementById('mb-'+l);
+  if(mb) mb.classList.add('active');
+}
+function confirmLang(){
+  localStorage.setItem('sefraos_lang',_sel);
+  document.getElementById('langOverlay').style.display='none';
+  if(_sel!==LANG) window.location.href=MAP[_sel]||'index.html';
+  document.querySelectorAll('.lang-bar-btn').forEach(b=>b.classList.remove('active'));
+  var lb=document.getElementById('lb-'+_sel);
+  if(lb) lb.classList.add('active');
+}
+function switchLang(l){
+  if(l===LANG) return;
+  localStorage.setItem('sefraos_lang',l);
+  window.location.href=MAP[l]||'index.html';
+}
+
+const D={1:{label:"强健自立",cfs:"CFS 1–3",bc:"#e8f4f5",bd:"#2e6b70",vt:"治疗 — 完整顺序",vc:"vp-g",ind:[{c:"ind-ok",t:"独立步行"},{c:"ind-ok",t:"无BADL依赖"},{c:"ind-ok",t:"预期寿命>12个月"},{c:"ind-ok",t:"无认知障碍"}],desc:"功能储备良好的活跃、自立患者。无限制性合并症。",tto:"<strong>推荐顺序:</strong><br>第1位 促骨形成药物: 特立帕肽、罗莫单抗或阿巴洛肽<br>第2位 无限期骨吸收抑制剂<br><br><em style='font-size:10px;color:#5a7275'>检查口腔健康。确认sc/iv依从能力。</em>",der:"骨折单元。基线DXA每2年。",cri:["Ca²⁺+VitD","跌倒: <strong>SPPB、Timed Up & Go、Downton量表</strong>","跌倒单元","多药联用"],seg:"3~6个月后检查。DXA每2年。"},2:{label:"衰弱前期",cfs:"CFS 4",bc:"#eaf5f6",bd:"#3a8a91",vt:"治疗 — 需老年医学评估",vc:"vp-g",ind:[{c:"ind-ok",t:"BADL独立"},{c:"ind-warn",t:"限制性症状"},{c:"ind-ok",t:"预期寿命>12个月"},{c:"ind-warn",t:"功能性迟缓"}],desc:"既往脆弱。限制活动的症状。",tto:"<strong>推荐顺序:</strong><br>第1位 T值很低或椎体骨折<br>第2位 骨吸收抑制剂",der:"综合老年医学评估(CGA)。",cri:["合并症稳定","eGFR<30调整","<strong>SPPB、Timed Up & Go、Downton</strong>","全员Ca²⁺+VitD"],seg:"3个月后检查。DXA每2年。"},3:{label:"轻中度衰弱",cfs:"CFS 5–6",bc:"#fdf4e0",bd:"#d4920a",vt:"个体化决策",vc:"vp-a",ind:[{c:"ind-warn",t:"IADL/BADL依赖"},{c:"ind-warn",t:"步行评估"},{c:"ind-warn",t:"认知评估"},{c:"ind-warn",t:"社会支持"}],desc:"CFS 5: IADL依赖。CFS 6: 轻度BADL。复杂决策。",tto:"<strong>决定前必须回答:</strong><br>步行如何？认知障碍？社会支持？<br><br>有利 → <strong>骨吸收抑制剂优先</strong>",der:"老年医学会诊必须。",cri:["步行独立或监督","轻度MCI可接受","照护者","预期寿命>12个月"],seg:"3个月后重新评估。CFS每6个月。"},4:{label:"重度衰弱",cfs:"CFS 7–8",bc:"#fdf0ee",bd:"#c86060",vt:"不启动治疗",vc:"vp-r",ind:[{c:"ind-ko",t:"重度BADL依赖"},{c:"ind-ko",t:"机构化风险"},{c:"ind-warn",t:"减药考虑"},{c:"ind-ko",t:"无预期效益"}],desc:"CFS 7: 完全依赖，稳定。CFS 8: 终末期临近。",tto:"<strong>不启动。</strong><br>→ 减药<br>→ Ca²⁺+VitD耐受时",der:"老年医学科。",cri:["BADL完全依赖","效益不可达","舒适"],seg:"无DXA。"},5:{label:"终末期疾病",cfs:"CFS 9",bc:"#fae8e8",bd:"#b03a3a",vt:"禁忌 — 减药",vc:"vp-r",ind:[{c:"ind-ko",t:"预期寿命<6个月"},{c:"ind-ko",t:"完全依赖"},{c:"ind-ko",t:"禁忌"},{c:"ind-ko",t:"舒适"}],desc:"终末期。预期寿命<6个月。",tto:"<strong>禁忌。</strong><br>→ 停止所有治疗<br>→ 姑息治疗",der:"立即姑息治疗。",cri:["预期寿命<6个月","完全依赖","舒适"],seg:"无DXA。"}};
+let checks=new Array(8).fill(null);
+function selectZone(z){
+  document.querySelectorAll('.zcard').forEach(b=>b.classList.remove('active'));
+  document.querySelector('[data-z="'+z+'"]').classList.add('active');
+  const d=D[z],p=document.getElementById('detailPanel');
+  p.style.borderColor=d.bd;p.style.background=d.bc;
+  const ih=d.ind.map(i=>'<div class="ind '+i.c+'"><div class="ind-dot"></div>'+i.t+'</div>').join('');
+  const ch=d.cri.map(c=>'<li>'+c+'</li>').join('');
+  p.innerHTML='<div class="panel-top"><span class="vp '+d.vc+'">'+d.vt+'</span><span class="panel-title">'+d.label+' <span style="font-size:11px;font-weight:400;color:#5a7275">('+d.cfs+')</span></span></div>'+
+    '<div class="inds">'+ih+'</div><p class="panel-desc">'+d.desc+'</p>'+
+    '<div class="cards-grid">'+
+    '<div class="p-card"><div class="p-card-title">Tratamiento recomendado</div><div class="p-card-body">'+d.tto+'</div></div>'+
+    '<div class="p-card"><div class="p-card-title">Criterios clave</div><div class="p-card-body"><ul>'+ch+'</ul></div></div>'+
+    '<div class="p-card"><div class="p-card-title">Derivación</div><div class="p-card-body">'+d.der+'</div></div>'+
+    '<div class="p-card"><div class="p-card-title">Seguimiento post-fractura</div><div class="p-card-body">'+d.seg+'</div></div>'+
+    '</div>';
+}
+function toggleCI(idx,type){
+  const el=document.getElementById('ci'+idx),cb=document.getElementById('cb'+idx);
+  if(checks[idx]===type){checks[idx]=null;el.className='ci';cb.textContent='';}
+  else{checks[idx]=type;el.className='ci '+type;cb.textContent=type==='ko'?'✗':'✓';}
+  updateScore();
+}
+function updateScore(){
+  const pos=[0,1,2,3,4].filter(i=>checks[i]==='ok').length;
+  const neg=[6,7].filter(i=>checks[i]==='ko').length;
+  const sv=document.getElementById('srVal'),vv=document.getElementById('srVerdict');
+  sv.textContent=pos+' / 5';
+  if(neg>=1){vv.style.cssText='background:#f5c0c0;color:#6a1010';vv.textContent='排除治疗';}
+  else if([5].filter(i=>checks[i]==='warn').length>=1&&pos<3){vv.style.cssText='background:#fddea0;color:#6a3800';vv.textContent='补充评估';}
+  else if(pos>=4&&neg===0){vv.style.cssText='background:#b2e8d0;color:#004030';vv.textContent='强力候选';}
+  else if(pos>=3){vv.style.cssText='background:#d0f0e0;color:#004030';vv.textContent='可能候选';}
+  else{vv.style.cssText='background:#f0f4f4;color:#5a7275';vv.textContent='不完整';}
+}
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
