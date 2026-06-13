@@ -1,10 +1,10 @@
 const CACHE_NAME = 'sefraos-protocolo-v1';
-const BASE = '/Sefraos-protocolo-interactivo/';
+const BASE = './';
 const ASSETS = [
   BASE,
-  BASE + 'index.html',
-  BASE + 'sefraos_icon_192.png',
-  BASE + 'sefraos_icon_512.png'
+  './index.html',
+  './sefraos_icon_192.png',
+  './sefraos_icon_512.png'
 ];
 
 // Instalación: guarda los archivos en caché
@@ -29,7 +29,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(cached => {
-      return cached || fetch(event.request).catch(() => caches.match(BASE + 'index.html'));
+      return cached || fetch(event.request).catch(() => caches.match('./index.html'));
     })
   );
 });
