@@ -83,9 +83,89 @@ body{font-family:'Nunito',Arial,sans-serif;background:#f4f7fb;color:#1a2a2e}
 .footer{background:#006871;color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .footer a{color:#b2f0d0;text-decoration:none;font-size:11px}
 .footer-disc{font-size:10px;opacity:.75;max-width:500px;line-height:1.4}
+
+  /* LANGUAGE SELECTOR BANNER */
+  .lang-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem}
+  .lang-modal{background:#fff;border-radius:20px;padding:2rem 1.5rem;max-width:520px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.3);text-align:center}
+  .lang-modal-logo{height:48px;margin-bottom:1rem}
+  .lang-modal h2{font-size:16px;font-weight:800;color:#006871;margin-bottom:4px}
+  .lang-modal p{font-size:12px;color:#5a7275;margin-bottom:1.4rem;line-height:1.5}
+  .lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
+  .lang-btn{border:2px solid #d0e4e6;border-radius:10px;padding:10px 6px;cursor:pointer;background:#fff;transition:all 0.15s;font-family:inherit;text-align:center}
+  .lang-btn:hover{border-color:#006871;background:#e8f4f5;transform:translateY(-2px)}
+  .lang-btn.active{border-color:#006871;background:#e8f4f5}
+  .lang-flag{font-size:22px;display:block;margin-bottom:3px}
+  .lang-name{font-size:11px;font-weight:700;color:#3F444B;display:block}
+  .lang-native{font-size:10px;color:#5a7275;display:block}
+  .lang-confirm{background:#006871;color:#fff;border:none;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;margin-top:4px;transition:background 0.15s}
+  .lang-confirm:hover{background:#004f57}
+  .lang-confirm:disabled{background:#a0c0c2;cursor:not-allowed}
 </style>
 </head>
 <body>
+
+  <!-- LANGUAGE SELECTOR BANNER -->
+  <div class="lang-overlay" id="langOverlay">
+    <div class="lang-modal">
+      <img class="lang-modal-logo" src="https://sefraos.es/wp-content/uploads/2021/08/cropped-Logo_SEFRAOS.png" alt="SEFRAOS" onerror="this.style.display='none'">
+      <h2>Selecciona tu idioma · Select your language</h2>
+      <p>La herramienta estará disponible en el idioma seleccionado.<br>The tool will be available in the selected language.</p>
+      <div class="lang-grid">
+        <button class="lang-btn active" onclick="selectLang('es','index.html',this)">
+          <span class="lang-flag">🇪🇸</span>
+          <span class="lang-name">Español</span>
+          <span class="lang-native">Español</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('en','en.html',this)">
+          <span class="lang-flag">🇬🇧</span>
+          <span class="lang-name">English</span>
+          <span class="lang-native">English</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('zh','zh.html',this)">
+          <span class="lang-flag">🇨🇳</span>
+          <span class="lang-name">中文</span>
+          <span class="lang-native">普通话</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('pt','pt.html',this)">
+          <span class="lang-flag">🇧🇷</span>
+          <span class="lang-name">Português</span>
+          <span class="lang-native">Português</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('fr','fr.html',this)">
+          <span class="lang-flag">🇫🇷</span>
+          <span class="lang-name">Français</span>
+          <span class="lang-native">Français</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('it','it.html',this)">
+          <span class="lang-flag">🇮🇹</span>
+          <span class="lang-name">Italiano</span>
+          <span class="lang-native">Italiano</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('de','de.html',this)">
+          <span class="lang-flag">🇩🇪</span>
+          <span class="lang-name">Deutsch</span>
+          <span class="lang-native">Deutsch</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('ja','ja.html',this)">
+          <span class="lang-flag">🇯🇵</span>
+          <span class="lang-name">日本語</span>
+          <span class="lang-native">日本語</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('ko','ko.html',this)">
+          <span class="lang-flag">🇰🇷</span>
+          <span class="lang-name">한국어</span>
+          <span class="lang-native">한국어</span>
+        </button>
+        <button class="lang-btn" onclick="selectLang('ar','ar.html',this)" style="direction:rtl">
+          <span class="lang-flag">🇸🇦</span>
+          <span class="lang-name">العربية</span>
+          <span class="lang-native">العربية</span>
+        </button>
+      </div>
+      <button class="lang-confirm" id="langConfirm" onclick="confirmLang()">Continuar · Continue</button>
+    </div>
+  </div>
+
 <div class="app">
 <div class="header">
   <div class="logo-area">
@@ -250,5 +330,40 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+<div style="position:fixed;bottom:16px;right:16px;z-index:1000">
+  <button onclick="document.getElementById('langOverlay').style.display='flex'" 
+    style="background:#006871;color:#fff;border:none;border-radius:50px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,0.2)">
+    🌐 Idioma
+  </button>
+</div>
+  <script>
+    var _selectedLang = 'es';
+    var _selectedFile = 'index.html';
+
+    // Check if language already chosen
+    (function(){
+      var saved = localStorage.getItem('sefraos_lang');
+      if(saved && saved !== 'es') {
+        window.location.href = saved + '.html';
+      } else if(saved === 'es') {
+        document.getElementById('langOverlay').style.display = 'none';
+      }
+    })();
+
+    function selectLang(code, file, btn) {
+      _selectedLang = code;
+      _selectedFile = file;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function confirmLang() {
+      localStorage.setItem('sefraos_lang', _selectedLang);
+      document.getElementById('langOverlay').style.display = 'none';
+      if(_selectedFile !== 'index.html') {
+        window.location.href = _selectedFile;
+      }
+    }
+  </script>
 </body>
 </html>
